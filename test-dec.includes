@@ -1,0 +1,5 @@
+.
+ffmpeg-src
+ffmpeg-src/compat
+ffmpeg-src/libavcodec
+ffmpeg-src/libavutil
