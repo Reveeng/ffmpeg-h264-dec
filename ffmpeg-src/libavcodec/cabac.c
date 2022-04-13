@@ -24,15 +24,12 @@
  * Context Adaptive Binary Arithmetic Coder.
  */
 
-#include <string.h>
+#include "libavutil/error.h"
+#include "libavutil/mem_internal.h"
 
-#include "libavutil/common.h"
-#include "libavutil/timer.h"
-#include "get_bits.h"
 #include "cabac.h"
-#include "cabac_functions.h"
 
-const uint8_t ff_h264_cabac_tables[512 + 4*2*64 + 4*64 + 63] = {
+DECLARE_ASM_ALIGNED(1, const uint8_t, ff_h264_cabac_tables)[512 + 4*2*64 + 4*64 + 63] = {
     9,8,7,7,6,6,6,6,5,5,5,5,5,5,5,5,
     4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
     3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
@@ -159,18 +156,6 @@ const uint8_t ff_h264_cabac_tables[512 + 4*2*64 + 4*64 + 63] = {
 };
 
 /**
- * @param buf_size size of buf in bits
- */
-void ff_init_cabac_encoder(CABACContext *c, uint8_t *buf, int buf_size){
-    init_put_bits(&c->pb, buf, buf_size);
-
-    c->low= 0;
-    c->range= 0x1FE;
-    c->outstanding_count= 0;
-    c->pb.bit_left++; //avoids firstBitFlag
-}
-
-/**
  *
  * @param buf_size size of buf in bits
  */
@@ -182,7 +167,7 @@ int ff_init_cabac_decoder(CABACContext *c, const uint8_t *buf, int buf_size){
 #if CABAC_BITS == 16
     c->low =  (*c->bytestream++)<<18;
     c->low+=  (*c->bytestream++)<<10;
-    // Keep our fetches on a 2-byte boundry as this should avoid ever having to
+    // Keep our fetches on a 2-byte boundary as this should avoid ever having to
     // do unaligned loads if the compiler (or asm) optimises the double byte
     // load into a single instruction
     if(((uintptr_t)c->bytestream & 1) == 0) {

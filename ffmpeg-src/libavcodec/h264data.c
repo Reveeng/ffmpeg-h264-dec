@@ -1,5 +1,5 @@
 /*
- * H26L/H264/AVC/JVT/14496-10/... encoder/decoder
+ * H.26L/H.264/AVC/JVT/14496-10/... encoder/decoder
  * Copyright (c) 2003 Michael Niedermayer <michaelni@gmx.at>
  *
  * This file is part of FFmpeg.
@@ -22,7 +22,7 @@
 /**
  * @file
  * @brief
- *     H264 / AVC / MPEG4 part10 codec data table
+ *     H.264 / AVC / MPEG-4 part10 codec data table
  * @author Michael Niedermayer <michaelni@gmx.at>
  */
 
@@ -30,9 +30,9 @@
 
 #include "libavutil/avutil.h"
 
-#include "avcodec.h"
-#include "h264.h"
+#include "h264_parse.h"
 #include "h264data.h"
+#include "mpegutils.h"
 
 const uint8_t ff_h264_golomb_to_pict_type[5] = {
     AV_PICTURE_TYPE_P, AV_PICTURE_TYPE_B, AV_PICTURE_TYPE_I,
